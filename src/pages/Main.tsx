@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { styled } from "styled-components";
-import { RecodeModal } from "../components/RecordModal";
+import { RecordModal } from "../components/RecordModal";
 import { Week } from "../components/Week";
 
 interface Props {
@@ -106,6 +106,7 @@ const ResetBtn = styled.button`
 
 export function Main() {
   const [isModal, setIsModal] = useState(Boolean);
+  console.log("모달 상태", isModal);
 
   return (
     <>
@@ -141,7 +142,7 @@ export function Main() {
 
           <ResetBtn>시간 초기화</ResetBtn>
         </ContentDiv>
-        {isModal && <RecodeModal />}
+        {isModal && <RecordModal />}
       </MainDiv>
     </>
   );

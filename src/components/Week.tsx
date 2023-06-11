@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { RecodeModal } from "./RecordModal";
+import { RecordModal } from "./RecordModal";
 
 interface Props {
   title?: string;
@@ -55,9 +55,11 @@ const ControlBtnContent = styled.p`
 `;
 
 export const Week = ({ title, hour, min, status }: Props) => {
-  const openModal = () => {
-    status(true);
-  };
+  // const openModal = () => {
+  //   status(true);
+  // };
+
+  const openModal = () => status((prev: boolean) => !prev);
 
   return (
     <>

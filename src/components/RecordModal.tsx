@@ -160,7 +160,7 @@ const stateOption = [
   { key: 5, value: "휴가" },
 ];
 
-export const RecodeModal = () => {
+export const RecordModal = () => {
   const [startTime, setStartTime] = useState<string | null>("09:00");
   const [endTime, setEndTime] = useState<string | null>("18:00");
   const [selectedOption, setSelectedOption] = useState("");
