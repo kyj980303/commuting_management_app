@@ -107,17 +107,44 @@ const ResetBtn = styled.button`
 export function Main() {
   const [isModal, setIsModal] = useState(Boolean);
 
+  const days = [
+    {
+      title: "월",
+      hour: 30,
+      min: 0
+    },
+    {
+      title: "화",
+      hour: 80,
+      min: 0
+    },
+    {
+      title: "수",
+      hour: 0,
+      min: 0
+    },
+    {
+      title: "목",
+      hour: 0,
+      min: 0
+    },
+    {
+      title: "금",
+      hour: 0,
+      min: 0
+    },
+
+  ];
+
   return (
     <>
       <MainDiv>
         <ContentDiv>
           <ContentTitle>퇴근합시당</ContentTitle>
           <RecordDiv>
-            <Week title="월" hour={3} min={40} status={setIsModal} />
-            <Week title="화" hour={7} min={40} status={setIsModal} />
-            <Week title="수" hour={9} min={33} status={setIsModal} />
-            <Week title="목" hour={8} min={40} status={setIsModal} />
-            <Week title="금" hour={3} min={33} status={setIsModal} />
+            {days.map(day => (
+              <Week key={day.title} title={day.title} hour={day.hour} min={day.min} status={setIsModal} />
+            ))}
           </RecordDiv>
           <CalculatedDiv>
             <WeekTime>
