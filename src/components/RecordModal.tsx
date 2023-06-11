@@ -3,7 +3,8 @@ import styled from "styled-components";
 import TimePicker from "react-time-picker";
 
 interface Props {
-  bgcolor: string;
+  bgcolor?: string;
+  status?: any;  
 }
 
 const ModalDiv = styled.div`
@@ -160,7 +161,7 @@ const stateOption = [
   { key: 5, value: "휴가" },
 ];
 
-export const RecordModal = () => {
+export const RecordModal = ({ bgcolor, status }: Props) => {
   const [startTime, setStartTime] = useState<string | null>("09:00");
   const [endTime, setEndTime] = useState<string | null>("18:00");
   const [selectedOption, setSelectedOption] = useState("");
@@ -179,7 +180,7 @@ export const RecordModal = () => {
   };
 
   const closeModal = () => {
-    setIsModal(false);
+    status((prev:boolean) => !prev);
   };
 
   console.log("option", selectedOption);

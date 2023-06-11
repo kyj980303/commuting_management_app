@@ -142,7 +142,7 @@ export function Main() {
 
           <ResetBtn>시간 초기화</ResetBtn>
         </ContentDiv>
-        {isModal && <RecordModal />}
+        {isModal && <RecordModal status={setIsModal}/>}
       </MainDiv>
     </>
   );
