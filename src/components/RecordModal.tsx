@@ -4,13 +4,10 @@ import TimePicker from "react-time-picker";
 
 interface Props {
   bgcolor?: string;
-  status?: any;  
+  status?: any;
 }
 
 const ModalDiv = styled.div`
-  /* width: 100%;
-  height: 100vh;
-  background-color: #c7c7c742; */
   width: 100%;
   height: 100%;
   position: absolute;
@@ -161,11 +158,10 @@ const stateOption = [
   { key: 5, value: "휴가" },
 ];
 
-export const RecordModal = ({ bgcolor, status }: Props) => {
+export const RecordModal = ({ status }: Props) => {
   const [startTime, setStartTime] = useState<string | null>("09:00");
   const [endTime, setEndTime] = useState<string | null>("18:00");
   const [selectedOption, setSelectedOption] = useState("");
-  const [isModal, setIsModal] = useState(true);
 
   const handleStartTime = (time: string | null) => {
     setStartTime(time);
@@ -180,59 +176,55 @@ export const RecordModal = ({ bgcolor, status }: Props) => {
   };
 
   const closeModal = () => {
-    status((prev:boolean) => !prev);
+    status((prev: boolean) => !prev);
   };
 
   console.log("option", selectedOption);
 
   return (
     <>
-      {isModal ? (
-        <ModalDiv>
-          <ContentDiv>
-            <ContentTitleDiv>
-              <TitleP>출퇴근 시간 등록</TitleP>
-            </ContentTitleDiv>
-            <RecordDiv>
-              <RecordTime>
-                <TitleBox bgcolor="#6aaf4a">출근 시간</TitleBox>
-                <TimePicker
-                  onChange={handleStartTime}
-                  value={startTime}
-                  clearIcon={null}
-                  disableClock={true}
-                  className="timepicker"
-                />
-              </RecordTime>
-              <RecordTime>
-                <TitleBox bgcolor="#FF6B6B">퇴근 시간</TitleBox>
-                <TimePicker
-                  onChange={handleEndTime}
-                  value={endTime}
-                  clearIcon={null}
-                  disableClock={true}
-                  className="timepicker"
-                />
-              </RecordTime>
-              <WorkStatus>
-                <StatusSelectBox onChange={handleSelect} value={selectedOption}>
-                  {stateOption.map((item, index) => (
-                    <Option key={item.key} value={item.value}>
-                      {item.value}
-                    </Option>
-                  ))}
-                </StatusSelectBox>
-              </WorkStatus>
-              <ButtonDiv>
-                <CancelBtn onClick={closeModal}>등록 취소</CancelBtn>
-                <RegisterBtn>등록 확인</RegisterBtn>
-              </ButtonDiv>
-            </RecordDiv>
-          </ContentDiv>
-        </ModalDiv>
-      ) : (
-        <></>
-      )}
+      <ModalDiv>
+        <ContentDiv>
+          <ContentTitleDiv>
+            <TitleP>출퇴근 시간 등록</TitleP>
+          </ContentTitleDiv>
+          <RecordDiv>
+            <RecordTime>
+              <TitleBox bgcolor="#6aaf4a">출근 시간</TitleBox>
+              <TimePicker
+                onChange={handleStartTime}
+                value={startTime}
+                clearIcon={null}
+                disableClock={true}
+                className="timepicker"
+              />
+            </RecordTime>
+            <RecordTime>
+              <TitleBox bgcolor="#FF6B6B">퇴근 시간</TitleBox>
+              <TimePicker
+                onChange={handleEndTime}
+                value={endTime}
+                clearIcon={null}
+                disableClock={true}
+                className="timepicker"
+              />
+            </RecordTime>
+            <WorkStatus>
+              <StatusSelectBox onChange={handleSelect} value={selectedOption}>
+                {stateOption.map((item, index) => (
+                  <Option key={item.key} value={item.value}>
+                    {item.value}
+                  </Option>
+                ))}
+              </StatusSelectBox>
+            </WorkStatus>
+            <ButtonDiv>
+              <CancelBtn onClick={closeModal}>등록 취소</CancelBtn>
+              <RegisterBtn>등록 확인</RegisterBtn>
+            </ButtonDiv>
+          </RecordDiv>
+        </ContentDiv>
+      </ModalDiv>
     </>
   );
 };

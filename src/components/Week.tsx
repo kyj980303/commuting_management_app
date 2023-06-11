@@ -55,10 +55,6 @@ const ControlBtnContent = styled.p`
 `;
 
 export const Week = ({ title, hour, min, status }: Props) => {
-  // const openModal = () => {
-  //   status(true);
-  // };
-
   const openModal = () => status((prev: boolean) => !prev);
 
   return (
