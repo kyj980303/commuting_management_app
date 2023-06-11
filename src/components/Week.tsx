@@ -1,9 +1,12 @@
-import { styled } from "styled-components"
+import { useEffect, useState } from "react";
+import { styled } from "styled-components";
+import { RecodeModal } from "./RecordModal";
 
 interface Props {
-  title?: string
-  hour?: number 
-  min?: number
+  title?: string;
+  hour?: number;
+  min?: number;
+  status?: any;
 }
 
 const WeekList = styled.div`
@@ -14,7 +17,7 @@ const WeekList = styled.div`
   display: inline-block;
   margin-right: 6.25px;
   margin-bottom: 7px;
-`
+`;
 
 const Day = styled.span`
   width: 52px;
@@ -25,17 +28,17 @@ const Day = styled.span`
   color: white;
   text-align: center;
   margin-top: 0px;
-`
+`;
 
 const DayContent = styled.p`
   font-size: 1.2rem;
   margin-top: 15px;
-`
+`;
 
 const TimeInput = styled.span`
   padding-left: 10px;
   font-size: 1.1rem;
-`
+`;
 
 const ControlBtn = styled.span`
   cursor: pointer;
@@ -45,29 +48,29 @@ const ControlBtn = styled.span`
   display: inline-block;
   color: white;
   text-align: center;
-`
+`;
 
 const ControlBtnContent = styled.p`
   font-size: 1.1rem;
-`
+`;
 
-export const Week = ({title, hour, min}:Props) => {
+export const Week = ({ title, hour, min, status }: Props) => {
+  const openModal = () => {
+    status(true);
+  };
+
   return (
     <>
       <WeekList>
         <Day>
-          <DayContent>
-            {title}
-          </DayContent>
+          <DayContent>{title}</DayContent>
         </Day>
         <TimeInput>
           {hour}시간 {min}분
         </TimeInput>
       </WeekList>
       <ControlBtn>
-        <ControlBtnContent>
-          등록  
-        </ControlBtnContent>
+        <ControlBtnContent onClick={openModal}>등록</ControlBtnContent>
       </ControlBtn>
     </>
   );
