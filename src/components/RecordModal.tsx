@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import TimePicker from "react-time-picker";
+import { useToasts } from "react-toast-notifications";
 
 interface Props {
   bgcolor?: string;
@@ -92,10 +93,35 @@ const TitleBox = styled.div<Props>`
   margin-right: 10px;
 `;
 
+const SelectBox = styled.select`
+  width: 20.1%;
+  height: 40px;
+  border: 1px solid #d1d1d1;
+  background-color: #f7f8fc;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-right: 2%;
+  padding-left: 1%;
+`;
+
+const InputTime = styled.input`
+  width: 20.1%;
+  height: 36px;
+  border: 1px solid #d1d1d1;
+  background-color: #f7f8fc;
+  border-radius: 5px;
+  font-size: 1rem;
+  padding-left: 2%;
+  &:first-of-type {
+    margin-right: 2%;
+  }
+`;
+
 const WorkStatus = styled.div`
   width: 100%;
   height: auto;
 `;
+
 const StatusSelectBox = styled.select`
   width: 98.5%;
   height: 40px;
@@ -159,17 +185,35 @@ const stateOption = [
 ];
 
 export const RecordModal = ({ status }: Props) => {
-  const [startTime, setStartTime] = useState<string | null>("09:00");
-  const [endTime, setEndTime] = useState<string | null>("18:00");
-  const [selectedOption, setSelectedOption] = useState("");
+  // const [startTime, setStartTime] = useState<string | null>("09:00");
+  // const [endTime, setEndTime] = useState<string | null>("18:00");
+  const { addToast } = useToasts();
+  const [selectedOption, setSelectedOption] = useState("근무상태");
+  const [startState, setStartState] = useState("오전");
+  const [startHour, setStartHour] = useState("9");
+  const [startMin, setStartMin] = useState("30");
+  const [endState, setEndState] = useState("오후");
+  const [endHour, setEndHour] = useState("6");
+  const [endMin, setEndMin] = useState("30");
+  const [stateNum, setStateNum] = useState(0);
 
-  const handleStartTime = (time: string | null) => {
-    setStartTime(time);
-  };
+  let hour = [];
+  for (let i = 1; i < 13; i++) {
+    hour.push(i);
+  }
 
-  const handleEndTime = (time: string | null) => {
-    setEndTime(time);
-  };
+  let min = [];
+  for (let i = 1; i < 60; i++) {
+    min.push(i);
+  }
+
+  // const handleStartTime = (time: string | null) => {
+  //   setStartTime(time);
+  // };
+
+  // const handleEndTime = (time: string | null) => {
+  //   setEndTime(time);
+  // };
 
   const handleSelect = (e: any) => {
     setSelectedOption(e.currentTarget.value);
@@ -179,7 +223,100 @@ export const RecordModal = ({ status }: Props) => {
     status((prev: boolean) => !prev);
   };
 
-  console.log("option", selectedOption);
+  const handleStartState = (e: any) => {
+    setStartState(e.currentTarget.value);
+  };
+
+  const handleStartHour = (e: any) => {
+    setStartHour(e.currentTarget.value);
+  };
+
+  const handleStartMin = (e: any) => {
+    setStartMin(e.currentTarget.value);
+  };
+
+  const handleEndState = (e: any) => {
+    setEndState(e.currentTarget.value);
+  };
+
+  const handleEndHour = (e: any) => {
+    setEndHour(e.currentTarget.value);
+  };
+
+  const handleEndMin = (e: any) => {
+    setEndMin(e.currentTarget.value);
+  };
+
+  useEffect(() => {
+    if (selectedOption === "휴가") {
+      setStateNum(-8);
+    } else if (selectedOption === "반차") {
+      setStateNum(-4);
+    } else if (selectedOption === "반반차") {
+      setStateNum(-2);
+    } else {
+      setStateNum(0);
+    }
+  }, [selectedOption]);
+
+  useEffect(() => {
+    if (Number(startHour) > 12 && Number(startHour) < 24) {
+      let start = (Number(startHour) - 12).toString();
+      setStartHour(start);
+    }
+
+    if (Number(endHour) > 12 && Number(endHour) < 24) {
+      let end = (Number(endHour) - 12).toString();
+      setEndHour(end);
+    }
+
+    if (startState === "오전" && Number(startHour) >= 12) {
+      addToast("1 ~ 11시 59분으로 표시해주세요", { appearance: "warning" });
+    } else if (startState === "오후" && Number(startHour) > 23) {
+      addToast("24시 미만으로 표시해주세요", { appearance: "warning" });
+    } else if (Number(startHour) < 0) {
+      addToast("시간이 음수가 될 수 없잖아!", { appearance: "warning" });
+    }
+
+    if (endState === "오전" && Number(endHour) >= 12) {
+      addToast("1 ~ 11시 59분으로 표시해주세요", { appearance: "warning" });
+    } else if (endState === "오후" && Number(endHour) > 23) {
+      addToast("24시 미만으로 표시해주세요", { appearance: "warning" });
+    } else if (Number(endHour) < 0) {
+      addToast("시간이 음수가 될 수 없잖아!", { appearance: "warning" });
+    }
+  }, [endHour, startHour]);
+
+  const insertRecord = () => {
+    const data = [
+      {
+        startState,
+        startHour,
+        startMin,
+      },
+      {
+        endState,
+        endHour,
+        endMin,
+      },
+      stateNum,
+    ];
+
+    localStorage.setItem("time", JSON.stringify(data));
+
+    console.log("dataaaa", data);
+    console.log(
+      "시작시간",
+      startState,
+      startHour,
+      startMin,
+      "끝나는시간",
+      endState,
+      endHour,
+      endMin,
+      stateNum
+    );
+  };
 
   return (
     <>
@@ -191,23 +328,71 @@ export const RecordModal = ({ status }: Props) => {
           <RecordDiv>
             <RecordTime>
               <TitleBox bgcolor="#6aaf4a">출근 시간</TitleBox>
-              <TimePicker
+              <SelectBox onChange={handleStartState} value={startState}>
+                <Option>오전</Option>
+                <Option>오후</Option>
+              </SelectBox>
+              <InputTime
+                type="text"
+                placeholder={startHour + "시"}
+                onChange={handleStartHour}
+              ></InputTime>
+              <InputTime
+                type="text"
+                placeholder={startMin + "분"}
+                onChange={handleStartMin}
+              ></InputTime>
+              {/* <SelectBox onChange={handleStartHour} value={startHour}>
+                {hour.map((item) => (
+                  <Option key={item}>{item}시</Option>
+                ))}
+              </SelectBox>
+              <SelectBox onChange={handleStartMin} value={startMin}>
+                {min.map((item) => (
+                  <Option key={item}>{item}분</Option>
+                ))}
+              </SelectBox> */}
+              {/* <TimePicker
                 onChange={handleStartTime}
                 value={startTime}
                 clearIcon={null}
                 disableClock={true}
                 className="timepicker"
-              />
+              /> */}
             </RecordTime>
             <RecordTime>
               <TitleBox bgcolor="#FF6B6B">퇴근 시간</TitleBox>
-              <TimePicker
+              <SelectBox onChange={handleEndState} value={endState}>
+                <Option>오전</Option>
+                <Option>오후</Option>
+              </SelectBox>
+              <InputTime
+                type="text"
+                placeholder={endHour + "시"}
+                onChange={handleEndHour}
+              ></InputTime>
+              <InputTime
+                type="text"
+                placeholder={endMin + "분"}
+                onChange={handleEndMin}
+              ></InputTime>
+              {/* <SelectBox onChange={handleEndHour} value={endHour}>
+                {hour.map((item) => (
+                  <Option key={item}>{item}시</Option>
+                ))}
+              </SelectBox>
+              <SelectBox onChange={handleEndMin} value={endMin}>
+                {min.map((item) => (
+                  <Option key={item}>{item}분</Option>
+                ))}
+              </SelectBox> */}
+              {/* <TimePicker
                 onChange={handleEndTime}
                 value={endTime}
                 clearIcon={null}
                 disableClock={true}
                 className="timepicker"
-              />
+              /> */}
             </RecordTime>
             <WorkStatus>
               <StatusSelectBox onChange={handleSelect} value={selectedOption}>
@@ -220,7 +405,7 @@ export const RecordModal = ({ status }: Props) => {
             </WorkStatus>
             <ButtonDiv>
               <CancelBtn onClick={closeModal}>등록 취소</CancelBtn>
-              <RegisterBtn>등록 확인</RegisterBtn>
+              <RegisterBtn onClick={insertRecord}>등록 확인</RegisterBtn>
             </ButtonDiv>
           </RecordDiv>
         </ContentDiv>
