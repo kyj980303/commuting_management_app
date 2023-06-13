@@ -3,10 +3,6 @@ import { styled } from "styled-components";
 import { RecordModal } from "../components/RecordModal";
 import { Week } from "../components/Week";
 
-interface Props {
-  color?: string;
-}
-
 const MainDiv = styled.div`
   width: 100%;
   height: 730px;
@@ -86,6 +82,10 @@ const CalculatedTime = styled.div`
   padding: 20px;
 `;
 
+interface Props {
+  color?: string;
+}
+
 const ResultTime = styled.span<Props>`
   float: right;
   font-size: 1.3rem;
@@ -106,35 +106,34 @@ const ResetBtn = styled.button`
 
 export function Main() {
   const [isModal, setIsModal] = useState(Boolean);
-  console.log("모달 상태", isModal);
+  const [dayTitle, setDayTitle] = useState("");
 
   const days = [
     {
       title: "월",
       hour: 30,
-      min: 0
+      min: 0,
     },
     {
       title: "화",
       hour: 80,
-      min: 0
+      min: 0,
     },
     {
       title: "수",
       hour: 0,
-      min: 0
+      min: 0,
     },
     {
       title: "목",
       hour: 0,
-      min: 0
+      min: 0,
     },
     {
       title: "금",
       hour: 0,
-      min: 0
+      min: 0,
     },
-
   ];
 
   return (
@@ -143,9 +142,41 @@ export function Main() {
         <ContentDiv>
           <ContentTitle>퇴근합시당</ContentTitle>
           <RecordDiv>
-            {days.map(day => (
-              <Week key={day.title} title={day.title} hour={day.hour} min={day.min} status={setIsModal} />
-            ))}
+            <Week
+              title="월"
+              hour={3}
+              min={40}
+              status={setIsModal}
+              dayTitle={setDayTitle}
+            />
+            <Week
+              title="화"
+              hour={7}
+              min={40}
+              status={setIsModal}
+              dayTitle={setDayTitle}
+            />
+            <Week
+              title="수"
+              hour={9}
+              min={33}
+              status={setIsModal}
+              dayTitle={setDayTitle}
+            />
+            <Week
+              title="목"
+              hour={8}
+              min={40}
+              status={setIsModal}
+              dayTitle={setDayTitle}
+            />
+            <Week
+              title="금"
+              hour={3}
+              min={33}
+              status={setIsModal}
+              dayTitle={setDayTitle}
+            />
           </RecordDiv>
           <CalculatedDiv>
             <WeekTime>
@@ -169,7 +200,7 @@ export function Main() {
 
           <ResetBtn>시간 초기화</ResetBtn>
         </ContentDiv>
-        {isModal && <RecordModal status={setIsModal}/>}
+        {isModal && <RecordModal status={setIsModal} dayTitle={dayTitle} />}
       </MainDiv>
     </>
   );
