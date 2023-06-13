@@ -59,7 +59,7 @@ export const Week = ({ title, hour, min, status, dayTitle }: Props) => {
   const openModal = () => {
     status((prev: boolean) => !prev);
     dayTitle(title);
-  }
+  };
 
   return (
     <>

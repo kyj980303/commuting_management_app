@@ -252,17 +252,17 @@ export const RecordModal = ({ status, dayTitle }: Props) => {
     }
 
     if (startState === "오전" && Number(startHour) >= 12) {
-      addToast("0시 0분 ~ 11시 59분으로 표시해주세요", { appearance: "warning" });
+      addToast("오전은 11시 59분까지 가능", { appearance: "warning" });
     } else if (startState === "오후" && Number(startHour) > 23) {
-      addToast("24시 미만으로 표시해주세요", { appearance: "warning" });
+      addToast("오후는 23시 59분까지 가능", { appearance: "warning" });
     } else if (Number(startHour) < 0) {
       addToast("시간이 음수가 될 수 없잖아!", { appearance: "warning" });
     }
 
     if (endState === "오전" && Number(endHour) >= 12) {
-      addToast("0시 0분 ~ 11시 59분으로 표시해주세요", { appearance: "warning" });
+      addToast("오전은 11시 59분까지 가능", { appearance: "warning" });
     } else if (endState === "오후" && Number(endHour) > 23) {
-      addToast("24시 미만으로 표시해주세요", { appearance: "warning" });
+      addToast("오후는 23시 59분까지 가능", { appearance: "warning" });
     } else if (Number(endHour) < 0) {
       addToast("시간이 음수가 될 수 없잖아!", { appearance: "warning" });
     }
@@ -286,6 +286,8 @@ export const RecordModal = ({ status, dayTitle }: Props) => {
     if (dayTitle !== undefined) {
       localStorage.setItem(dayTitle, JSON.stringify(data));
     }
+
+    closeModal();
 
     closeModal();
 
