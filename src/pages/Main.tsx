@@ -3,10 +3,6 @@ import { styled } from "styled-components";
 import { RecordModal } from "../components/RecordModal";
 import { Week } from "../components/Week";
 
-interface Props {
-  color?: string;
-}
-
 const MainDiv = styled.div`
   width: 100%;
   height: 730px;
@@ -85,6 +81,10 @@ const CalculatedTime = styled.div`
   height: 20px;
   padding: 20px;
 `;
+
+interface Props {
+  color?: string;
+}
 
 const ResultTime = styled.span<Props>`
   float: right;

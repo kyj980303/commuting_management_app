@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import TimePicker from "react-time-picker";
 import { useToasts } from "react-toast-notifications";
-
-interface Props {
-  bgcolor?: string;
-  status?: any;
-  dayTitle?: string;
-}
 
 const ModalDiv = styled.div`
   width: 100%;
@@ -185,6 +178,12 @@ const stateOption = [
   { key: 5, value: "휴가" },
 ];
 
+interface Props {
+  bgcolor?: string;
+  status?: any;
+  dayTitle?: string;
+}
+
 export const RecordModal = ({ status, dayTitle }: Props) => {
   const { addToast } = useToasts();
   const [selectedOption, setSelectedOption] = useState("근무상태");
@@ -195,38 +194,6 @@ export const RecordModal = ({ status, dayTitle }: Props) => {
   const [endHour, setEndHour] = useState("6");
   const [endMin, setEndMin] = useState("30");
   const [stateNum, setStateNum] = useState(0);
-
-  const handleSelect = (e: any) => {
-    setSelectedOption(e.currentTarget.value);
-  };
-
-  const closeModal = () => {
-    status((prev: boolean) => !prev);
-  };
-
-  const handleStartState = (e: any) => {
-    setStartState(e.currentTarget.value);
-  };
-
-  const handleStartHour = (e: any) => {
-    setStartHour(e.currentTarget.value);
-  };
-
-  const handleStartMin = (e: any) => {
-    setStartMin(e.currentTarget.value);
-  };
-
-  const handleEndState = (e: any) => {
-    setEndState(e.currentTarget.value);
-  };
-
-  const handleEndHour = (e: any) => {
-    setEndHour(e.currentTarget.value);
-  };
-
-  const handleEndMin = (e: any) => {
-    setEndMin(e.currentTarget.value);
-  };
 
   useEffect(() => {
     if (selectedOption === "휴가") {
@@ -268,6 +235,38 @@ export const RecordModal = ({ status, dayTitle }: Props) => {
     }
   }, [endHour, startHour]);
 
+  const handleSelect = (e: any) => {
+    setSelectedOption(e.currentTarget.value);
+  };
+
+  const closeModal = () => {
+    status((prev: boolean) => !prev);
+  };
+
+  const handleStartState = (e: any) => {
+    setStartState(e.currentTarget.value);
+  };
+
+  const handleStartHour = (e: any) => {
+    setStartHour(e.currentTarget.value);
+  };
+
+  const handleStartMin = (e: any) => {
+    setStartMin(e.currentTarget.value);
+  };
+
+  const handleEndState = (e: any) => {
+    setEndState(e.currentTarget.value);
+  };
+
+  const handleEndHour = (e: any) => {
+    setEndHour(e.currentTarget.value);
+  };
+
+  const handleEndMin = (e: any) => {
+    setEndMin(e.currentTarget.value);
+  };
+
   const insertRecord = () => {
     const data = [
       {
@@ -286,8 +285,6 @@ export const RecordModal = ({ status, dayTitle }: Props) => {
     if (dayTitle !== undefined) {
       localStorage.setItem(dayTitle, JSON.stringify(data));
     }
-
-    closeModal();
 
     closeModal();
 
