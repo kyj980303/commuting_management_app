@@ -7,6 +7,7 @@ interface Props {
   hour?: number;
   min?: number;
   status?: any;
+  dayTitle?: any;
 }
 
 const WeekList = styled.div`
@@ -54,8 +55,11 @@ const ControlBtnContent = styled.p`
   font-size: 1.1rem;
 `;
 
-export const Week = ({ title, hour, min, status }: Props) => {
-  const openModal = () => status((prev: boolean) => !prev);
+export const Week = ({ title, hour, min, status, dayTitle }: Props) => {
+  const openModal = () => {
+    status((prev: boolean) => !prev);
+    dayTitle(title);
+  }
 
   return (
     <>

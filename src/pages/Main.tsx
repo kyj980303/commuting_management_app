@@ -106,6 +106,7 @@ const ResetBtn = styled.button`
 
 export function Main() {
   const [isModal, setIsModal] = useState(Boolean);
+  const [dayTitle, setDayTitle] = useState('');
   console.log("모달 상태", isModal);
 
   return (
@@ -114,11 +115,11 @@ export function Main() {
         <ContentDiv>
           <ContentTitle>퇴근합시당</ContentTitle>
           <RecordDiv>
-            <Week title="월" hour={3} min={40} status={setIsModal} />
-            <Week title="화" hour={7} min={40} status={setIsModal} />
-            <Week title="수" hour={9} min={33} status={setIsModal} />
-            <Week title="목" hour={8} min={40} status={setIsModal} />
-            <Week title="금" hour={3} min={33} status={setIsModal} />
+            <Week title="월" hour={3} min={40} status={setIsModal} dayTitle={setDayTitle} />
+            <Week title="화" hour={7} min={40} status={setIsModal} dayTitle={setDayTitle} />
+            <Week title="수" hour={9} min={33} status={setIsModal} dayTitle={setDayTitle} />
+            <Week title="목" hour={8} min={40} status={setIsModal} dayTitle={setDayTitle} />
+            <Week title="금" hour={3} min={33} status={setIsModal} dayTitle={setDayTitle} />
           </RecordDiv>
           <CalculatedDiv>
             <WeekTime>
@@ -142,7 +143,7 @@ export function Main() {
 
           <ResetBtn>시간 초기화</ResetBtn>
         </ContentDiv>
-        {isModal && <RecordModal status={setIsModal}/>}
+        {isModal && <RecordModal status={setIsModal} dayTitle={dayTitle} />}
       </MainDiv>
     </>
   );

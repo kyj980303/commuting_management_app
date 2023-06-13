@@ -6,6 +6,7 @@ import { useToasts } from "react-toast-notifications";
 interface Props {
   bgcolor?: string;
   status?: any;
+  dayTitle?: string;
 }
 
 const ModalDiv = styled.div`
@@ -184,9 +185,7 @@ const stateOption = [
   { key: 5, value: "휴가" },
 ];
 
-export const RecordModal = ({ status }: Props) => {
-  // const [startTime, setStartTime] = useState<string | null>("09:00");
-  // const [endTime, setEndTime] = useState<string | null>("18:00");
+export const RecordModal = ({ status, dayTitle }: Props) => {
   const { addToast } = useToasts();
   const [selectedOption, setSelectedOption] = useState("근무상태");
   const [startState, setStartState] = useState("오전");
@@ -196,24 +195,6 @@ export const RecordModal = ({ status }: Props) => {
   const [endHour, setEndHour] = useState("6");
   const [endMin, setEndMin] = useState("30");
   const [stateNum, setStateNum] = useState(0);
-
-  let hour = [];
-  for (let i = 1; i < 13; i++) {
-    hour.push(i);
-  }
-
-  let min = [];
-  for (let i = 1; i < 60; i++) {
-    min.push(i);
-  }
-
-  // const handleStartTime = (time: string | null) => {
-  //   setStartTime(time);
-  // };
-
-  // const handleEndTime = (time: string | null) => {
-  //   setEndTime(time);
-  // };
 
   const handleSelect = (e: any) => {
     setSelectedOption(e.currentTarget.value);
@@ -271,7 +252,7 @@ export const RecordModal = ({ status }: Props) => {
     }
 
     if (startState === "오전" && Number(startHour) >= 12) {
-      addToast("1 ~ 11시 59분으로 표시해주세요", { appearance: "warning" });
+      addToast("0시 0분 ~ 11시 59분으로 표시해주세요", { appearance: "warning" });
     } else if (startState === "오후" && Number(startHour) > 23) {
       addToast("24시 미만으로 표시해주세요", { appearance: "warning" });
     } else if (Number(startHour) < 0) {
@@ -279,7 +260,7 @@ export const RecordModal = ({ status }: Props) => {
     }
 
     if (endState === "오전" && Number(endHour) >= 12) {
-      addToast("1 ~ 11시 59분으로 표시해주세요", { appearance: "warning" });
+      addToast("0시 0분 ~ 11시 59분으로 표시해주세요", { appearance: "warning" });
     } else if (endState === "오후" && Number(endHour) > 23) {
       addToast("24시 미만으로 표시해주세요", { appearance: "warning" });
     } else if (Number(endHour) < 0) {
@@ -302,7 +283,11 @@ export const RecordModal = ({ status }: Props) => {
       stateNum,
     ];
 
-    localStorage.setItem("time", JSON.stringify(data));
+    if (dayTitle !== undefined) {
+      localStorage.setItem(dayTitle, JSON.stringify(data));
+    }
+
+    closeModal();
 
     console.log("dataaaa", data);
     console.log(
@@ -342,23 +327,6 @@ export const RecordModal = ({ status }: Props) => {
                 placeholder={startMin + "분"}
                 onChange={handleStartMin}
               ></InputTime>
-              {/* <SelectBox onChange={handleStartHour} value={startHour}>
-                {hour.map((item) => (
-                  <Option key={item}>{item}시</Option>
-                ))}
-              </SelectBox>
-              <SelectBox onChange={handleStartMin} value={startMin}>
-                {min.map((item) => (
-                  <Option key={item}>{item}분</Option>
-                ))}
-              </SelectBox> */}
-              {/* <TimePicker
-                onChange={handleStartTime}
-                value={startTime}
-                clearIcon={null}
-                disableClock={true}
-                className="timepicker"
-              /> */}
             </RecordTime>
             <RecordTime>
               <TitleBox bgcolor="#FF6B6B">퇴근 시간</TitleBox>
@@ -376,23 +344,6 @@ export const RecordModal = ({ status }: Props) => {
                 placeholder={endMin + "분"}
                 onChange={handleEndMin}
               ></InputTime>
-              {/* <SelectBox onChange={handleEndHour} value={endHour}>
-                {hour.map((item) => (
-                  <Option key={item}>{item}시</Option>
-                ))}
-              </SelectBox>
-              <SelectBox onChange={handleEndMin} value={endMin}>
-                {min.map((item) => (
-                  <Option key={item}>{item}분</Option>
-                ))}
-              </SelectBox> */}
-              {/* <TimePicker
-                onChange={handleEndTime}
-                value={endTime}
-                clearIcon={null}
-                disableClock={true}
-                className="timepicker"
-              /> */}
             </RecordTime>
             <WorkStatus>
               <StatusSelectBox onChange={handleSelect} value={selectedOption}>
