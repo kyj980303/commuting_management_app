@@ -182,17 +182,18 @@ interface Props {
   bgcolor?: string;
   status?: any;
   dayTitle?: string;
+  btnTitle?: string;
 }
 
-export const RecordModal = ({ status, dayTitle }: Props) => {
+export const RecordModal = ({ status, dayTitle, btnTitle }: Props) => {
   const { addToast } = useToasts();
   const [selectedOption, setSelectedOption] = useState("근무상태");
   const [startState, setStartState] = useState("오전");
-  const [startHour, setStartHour] = useState("9");
-  const [startMin, setStartMin] = useState("30");
+  const [startHour, setStartHour] = useState("");
+  const [startMin, setStartMin] = useState("");
   const [endState, setEndState] = useState("오후");
-  const [endHour, setEndHour] = useState("6");
-  const [endMin, setEndMin] = useState("30");
+  const [endHour, setEndHour] = useState("");
+  const [endMin, setEndMin] = useState("");
   const [stateNum, setStateNum] = useState(0);
 
   useEffect(() => {
@@ -244,51 +245,58 @@ export const RecordModal = ({ status, dayTitle }: Props) => {
   };
 
   const handleStartState = (e: any) => {
-    setStartState(e.currentTarget.value);
+    setStartState(e.target.value);
   };
 
   const handleStartHour = (e: any) => {
-    setStartHour(e.currentTarget.value);
+    setStartHour(e.target.value);
   };
 
   const handleStartMin = (e: any) => {
-    setStartMin(e.currentTarget.value);
+    setStartMin(e.target.value);
   };
 
   const handleEndState = (e: any) => {
-    setEndState(e.currentTarget.value);
+    setEndState(e.target.value);
   };
 
   const handleEndHour = (e: any) => {
-    setEndHour(e.currentTarget.value);
+    setEndHour(e.target.value);
   };
 
   const handleEndMin = (e: any) => {
-    setEndMin(e.currentTarget.value);
+    setEndMin(e.target.value);
   };
 
   const insertRecord = () => {
-    const data = [
-      {
-        startState,
-        startHour,
-        startMin,
-      },
-      {
-        endState,
-        endHour,
-        endMin,
-      },
-      stateNum,
-    ];
+    if (startHour === "" || endHour === "") {
+      addToast("시간을 입력해주세요!", { appearance: "warning" });
+    } else if (startMin === "" || endMin === "") {
+      addToast("분을 입력해주세요!", { appearance: "warning" });
+    } else {
+      closeModal();
+      const data = [
+        {
+          startState,
+          startHour,
+          startMin,
+        },
+        {
+          endState,
+          endHour,
+          endMin,
+        },
+        stateNum,
+        "수정",
+      ];
 
-    if (dayTitle !== undefined) {
-      localStorage.setItem(dayTitle, JSON.stringify(data));
+      if (dayTitle !== undefined) {
+        localStorage.setItem(dayTitle, JSON.stringify(data));
+      }
+
+      console.log("dataaaa", data);
     }
 
-    closeModal();
-
-    console.log("dataaaa", data);
     console.log(
       "시작시간",
       startState,
@@ -318,12 +326,14 @@ export const RecordModal = ({ status, dayTitle }: Props) => {
               </SelectBox>
               <InputTime
                 type="text"
-                placeholder={startHour + "시"}
+                placeholder="9시"
+                value={startHour}
                 onChange={handleStartHour}
               ></InputTime>
               <InputTime
                 type="text"
-                placeholder={startMin + "분"}
+                placeholder="30분"
+                value={startMin}
                 onChange={handleStartMin}
               ></InputTime>
             </RecordTime>
@@ -335,12 +345,14 @@ export const RecordModal = ({ status, dayTitle }: Props) => {
               </SelectBox>
               <InputTime
                 type="text"
-                placeholder={endHour + "시"}
+                placeholder="18시"
+                value={endHour}
                 onChange={handleEndHour}
               ></InputTime>
               <InputTime
                 type="text"
-                placeholder={endMin + "분"}
+                placeholder="30분"
+                value={endMin}
                 onChange={handleEndMin}
               ></InputTime>
             </RecordTime>

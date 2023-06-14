@@ -36,9 +36,10 @@ const RecordDiv = styled.div`
 `;
 
 const CalculatedDiv = styled.div`
-  border: 1px solid #d1d1d1;
   width: 100%;
   height: auto;
+  border: 1px solid #d1d1d1;
+  border-radius: 5px;
 `;
 
 const WeekTime = styled.div`
@@ -46,6 +47,7 @@ const WeekTime = styled.div`
   height: 20px;
   padding: 20px;
   border-bottom: 1px solid #d1d1d1;
+  border-radius: 5px 5px 0px 0px;
 `;
 
 const WeekTitleSpan = styled.span`
@@ -56,6 +58,7 @@ const WeekTitleSpan = styled.span`
 
 const TimeSpan = styled.span`
   float: right;
+  margin-right: 2%;
   font-size: 1.3rem;
   font-weight: bold;
   color: #616161;
@@ -66,20 +69,26 @@ const TimeInput = styled.input`
   width: 50px;
   height: 25px;
   margin-top: -4px;
-  padding-right: 6px;
+  padding-right: 0.5%;
   text-align: right;
   margin-right: 5px;
   font-size: 1.3rem;
   font-weight: bold;
   color: #6b8dff;
-  border: 1px solid #d1d1d1;
+  border: 1px solid #bababa;
+  &::placeholder {
+    color: #6b8dff;
+  }
 `;
 
 const CalculatedTime = styled.div`
-  border-bottom: 1px solid #d1d1d1;
   background-color: white;
   height: 20px;
   padding: 20px;
+  &:nth-of-type(3) {
+    border-radius: 0px 0px 5px 5px;
+    border-top: 1px solid #d1d1d1;
+  }
 `;
 
 interface Props {
@@ -101,12 +110,27 @@ const ResetBtn = styled.button`
   color: #fff;
   border: none;
   margin-top: 10px;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    background-color: #5f7bd5;
+    transition: all 0.3s;
+  }
 `;
 
 export function Main() {
   const [isModal, setIsModal] = useState(Boolean);
   const [dayTitle, setDayTitle] = useState("");
+  const [weekWorkTime, setWeekWorkTime] = useState("");
+  const [btnTitle, setBtnTitle] = useState("");
+
+  const handleWeekWorkTime = (e: any) => {
+    setWeekWorkTime(e.target.value);
+  };
+
+  console.log("주간 근무 시간: ", weekWorkTime);
+  // console.log("버튼 명: ", btnTitle);
 
   const days = [
     {
@@ -148,6 +172,7 @@ export function Main() {
               min={40}
               status={setIsModal}
               dayTitle={setDayTitle}
+              // btnTitle={btnTitle}
             />
             <Week
               title="화"
@@ -155,6 +180,7 @@ export function Main() {
               min={40}
               status={setIsModal}
               dayTitle={setDayTitle}
+              // btnTitle={btnTitle}
             />
             <Week
               title="수"
@@ -162,6 +188,7 @@ export function Main() {
               min={33}
               status={setIsModal}
               dayTitle={setDayTitle}
+              // btnTitle={btnTitle}
             />
             <Week
               title="목"
@@ -169,6 +196,7 @@ export function Main() {
               min={40}
               status={setIsModal}
               dayTitle={setDayTitle}
+              // btnTitle={btnTitle}
             />
             <Week
               title="금"
@@ -176,31 +204,44 @@ export function Main() {
               min={33}
               status={setIsModal}
               dayTitle={setDayTitle}
+              // btnTitle={btnTitle}
             />
           </RecordDiv>
           <CalculatedDiv>
             <WeekTime>
               <WeekTitleSpan>주간 근무 시간</WeekTitleSpan>
               <TimeSpan>시간</TimeSpan>
-              <TimeInput type="text" placeholder="40" />
+              <TimeInput
+                type="text"
+                placeholder="40"
+                value={weekWorkTime}
+                onChange={handleWeekWorkTime}
+              />
             </WeekTime>
-
             <CalculatedTime>
               <WeekTitleSpan>총 근무 시간</WeekTitleSpan>
+              <TimeSpan>분</TimeSpan>
+              <ResultTime color="#60aa3e">30</ResultTime>
               <TimeSpan>시간</TimeSpan>
               <ResultTime color="#60aa3e">38</ResultTime>
             </CalculatedTime>
-
             <CalculatedTime>
               <WeekTitleSpan>남은 시간</WeekTitleSpan>
+              <TimeSpan>분</TimeSpan>
+              <ResultTime color="#ff6b6b">30</ResultTime>
               <TimeSpan>시간</TimeSpan>
-              <ResultTime color="#ff6b6b">2</ResultTime>
+              <ResultTime color="#ff6b6b">1</ResultTime>
             </CalculatedTime>
           </CalculatedDiv>
-
           <ResetBtn>시간 초기화</ResetBtn>
         </ContentDiv>
-        {isModal && <RecordModal status={setIsModal} dayTitle={dayTitle} />}
+        {isModal && (
+          <RecordModal
+            status={setIsModal}
+            dayTitle={dayTitle}
+            // btnTitle={setBtnTitle}
+          />
+        )}
       </MainDiv>
     </>
   );
