@@ -6,6 +6,7 @@ interface Props {
   min?: number;
   status?: any;
   dayTitle?: any;
+  btnTitle?: any;
 }
 
 const WeekList = styled.div`
@@ -16,6 +17,7 @@ const WeekList = styled.div`
   display: inline-block;
   margin-right: 6.25px;
   margin-bottom: 7px;
+  border-radius: 5px;
 `;
 
 const Day = styled.span`
@@ -26,7 +28,7 @@ const Day = styled.span`
   font-size: 1rem;
   color: white;
   text-align: center;
-  margin-top: 0px;
+  border-radius: 5px 0px 0px 5px;
 `;
 
 const DayContent = styled.p`
@@ -39,26 +41,39 @@ const TimeInput = styled.span`
   font-size: 1.1rem;
 `;
 
-const ControlBtn = styled.span`
+const ControlBtn = styled.button`
   cursor: pointer;
-  width: 53px;
-  height: 53px;
-  background-color: #8072d7;
+  width: 55px;
+  height: 55px;
+  background-color: #6aaf4a;
   display: inline-block;
   color: white;
   text-align: center;
-`;
-
-const ControlBtnContent = styled.p`
+  border: none;
+  border-radius: 5px;
   font-size: 1.1rem;
+  position: relative;
+  top: -2px;
+  &:hover {
+    background-color: #5b9440;
+    transition: all 0.3s;
+  }
 `;
 
-export const Week = ({ title, hour, min, status, dayTitle }: Props) => {
+export const Week = ({
+  title,
+  hour,
+  min,
+  status,
+  dayTitle,
+  btnTitle,
+}: Props) => {
   const openModal = () => {
     status((prev: boolean) => !prev);
     dayTitle(title);
   };
 
+  console.log("버튼 명 week: ", btnTitle);
   return (
     <>
       <WeekList>
@@ -69,9 +84,7 @@ export const Week = ({ title, hour, min, status, dayTitle }: Props) => {
           {hour}시간 {min}분
         </TimeInput>
       </WeekList>
-      <ControlBtn>
-        <ControlBtnContent onClick={openModal}>등록</ControlBtnContent>
-      </ControlBtn>
+      <ControlBtn onClick={openModal}>등록</ControlBtn>
     </>
   );
 };
