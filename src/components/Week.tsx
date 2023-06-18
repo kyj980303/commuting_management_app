@@ -10,7 +10,7 @@ interface Props {
 }
 
 const WeekList = styled.div`
-  width: 84%;
+  width: 82%;
   height: 52px;
   background-color: #f8f8f8;
   border: 1px solid #d1d1d1;
@@ -73,7 +73,6 @@ export const Week = ({
     dayTitle(title);
   };
 
-  console.log("버튼 명 week: ", btnTitle);
   return (
     <>
       <WeekList>

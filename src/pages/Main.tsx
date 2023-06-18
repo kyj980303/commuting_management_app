@@ -2,6 +2,7 @@ import { useState } from "react";
 import { styled } from "styled-components";
 import { RecordModal } from "../components/RecordModal";
 import { Week } from "../components/Week";
+import { start } from "repl";
 
 const MainDiv = styled.div`
   width: 100%;
@@ -129,36 +130,65 @@ export function Main() {
     setWeekWorkTime(e.target.value);
   };
 
-  console.log("주간 근무 시간: ", weekWorkTime);
-  // console.log("버튼 명: ", btnTitle);
+  const localStorage = window.localStorage;
+  const days = ["월", "화", "수", "목", "금"];
 
-  const days = [
-    {
-      title: "월",
-      hour: 30,
-      min: 0,
-    },
-    {
-      title: "화",
-      hour: 80,
-      min: 0,
-    },
-    {
-      title: "수",
-      hour: 0,
-      min: 0,
-    },
-    {
-      title: "목",
-      hour: 0,
-      min: 0,
-    },
-    {
-      title: "금",
-      hour: 0,
-      min: 0,
-    },
-  ];
+  let data = [];
+  let startDate: Date;
+  let endDate: Date;
+  let storedVal: string | null;
+  let value : any;
+  let diff: number;
+  let diffHour: number;
+  let diffMin: number;
+  for (let i = 0; i < 5; i++) {
+    storedVal = localStorage.getItem(days[i]);
+    if (storedVal !== null) {
+      value = JSON.parse(storedVal);
+
+      console.log('확인');
+      console.log(value);
+      if (value.startState === '오후') {
+        startDate = new Date(1998, 3, 3, Number(value.startHour) + 12, Number(value.startMin), 0);
+      } else {
+        startDate = new Date(1998, 3, 3, Number(value.startHour), Number(value.startMin), 0);
+      }
+      
+      if (value.endState === '오후') {
+        endDate = new Date(1998, 3, 3, Number(value.endHour) + 12, Number(value.endMin), 0);
+      } else {
+        endDate = new Date(1998, 3, 3, Number(value.endHour), Number(value.endMin), 0);
+      }
+
+      diff = (endDate.getTime() - startDate.getTime()) / 1000 / 60;
+      diffHour = Math.floor(diff / 60) + Number(value.stateNum);
+      diffMin = diff % 60;
+
+      data.push({
+        dayTitle: days[i],
+        hour: diffHour,
+        min: diffMin
+      });
+    } else {
+      data.push({
+        dayTitle: days[i],
+        hour: 0,
+        min: 0
+      })
+    }
+  }
+
+  data.map(e => {console.log(`
+    hour : ${e.hour} / min : ${e.min}
+  `)});
+
+  console.log(new Date(1998, 3, 3, 9, 0, 0));
+  console.log(new Date(1998, 3, 3, 18, 30, 0));
+  const ttt = (new Date(1998, 3, 3, 18, 30, 0).getTime() - new Date(1998, 3, 3, 9, 0, 0).getTime()) / 1000 / 60;
+  console.log(ttt);
+  console.log(`diffHour : ${Math.floor(ttt / 60)}`);
+  console.log(`diffMin : ${ttt % 60}`);
+
 
   return (
     <>
@@ -166,46 +196,9 @@ export function Main() {
         <ContentDiv>
           <ContentTitle>퇴근합시당</ContentTitle>
           <RecordDiv>
-            <Week
-              title="월"
-              hour={3}
-              min={40}
-              status={setIsModal}
-              dayTitle={setDayTitle}
-              // btnTitle={btnTitle}
-            />
-            <Week
-              title="화"
-              hour={7}
-              min={40}
-              status={setIsModal}
-              dayTitle={setDayTitle}
-              // btnTitle={btnTitle}
-            />
-            <Week
-              title="수"
-              hour={9}
-              min={33}
-              status={setIsModal}
-              dayTitle={setDayTitle}
-              // btnTitle={btnTitle}
-            />
-            <Week
-              title="목"
-              hour={8}
-              min={40}
-              status={setIsModal}
-              dayTitle={setDayTitle}
-              // btnTitle={btnTitle}
-            />
-            <Week
-              title="금"
-              hour={3}
-              min={33}
-              status={setIsModal}
-              dayTitle={setDayTitle}
-              // btnTitle={btnTitle}
-            />
+            {data.map(day => {
+              return (<Week key={day.dayTitle} title={day.dayTitle} hour={day.hour} min={day.min} />)
+            })}
           </RecordDiv>
           <CalculatedDiv>
             <WeekTime>

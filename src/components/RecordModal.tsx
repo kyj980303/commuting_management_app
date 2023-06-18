@@ -275,20 +275,17 @@ export const RecordModal = ({ status, dayTitle, btnTitle }: Props) => {
       addToast("분을 입력해주세요!", { appearance: "warning" });
     } else {
       closeModal();
-      const data = [
-        {
-          startState,
-          startHour,
-          startMin,
-        },
-        {
-          endState,
-          endHour,
-          endMin,
-        },
-        stateNum,
-        "수정",
-      ];
+      const data = {
+        startState : startState,
+        startHour : startHour,
+        startMin : startMin,
+        endState : endState,
+        endHour : endHour,
+        endMin : endMin,
+        stateNum : stateNum,
+        btnTitle : "수정"
+      };
+      
 
       if (dayTitle !== undefined) {
         localStorage.setItem(dayTitle, JSON.stringify(data));
