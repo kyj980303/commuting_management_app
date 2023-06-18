@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { RecordModal } from "../components/RecordModal";
 import { Week } from "../components/Week";
@@ -123,40 +123,82 @@ const ResetBtn = styled.button`
 export function Main() {
   const [isModal, setIsModal] = useState(Boolean);
   const [dayTitle, setDayTitle] = useState("");
-  const [weekWorkTime, setWeekWorkTime] = useState("");
+  const [weekWorkTime, setWeekWorkTime] = useState(40);
   const [btnTitle, setBtnTitle] = useState("");
   const [calculatedTime, setCalculatedTime] = useState(0);
+  const [remainTime, setRemainTime] = useState(0);
+  let data: any = [];
+  let startDate: Date;
+  let endDate: Date;
+  let storedVal: string | null;
+  let value: any;
+  let diff: number;
+  let diffHour: number;
+  let diffMin: number;
+
+  useEffect(() => {
+    let totalMin: number = 0;
+    let remain: number = 0;
+    for (let i = 0; i < data.length; i++) {
+      const temp = data[i];
+      totalMin += temp.hour * 60 + temp.min;
+    }
+    setCalculatedTime(totalMin);
+
+    remain = weekWorkTime * 60 - totalMin;
+    setRemainTime(remain);
+  }, [isModal, weekWorkTime]);
 
   const handleWeekWorkTime = (e: any) => {
-    setWeekWorkTime(e.target.value);
+    setWeekWorkTime(Number(e.target.value));
   };
 
   const localStorage = window.localStorage;
   const days = ["월", "화", "수", "목", "금"];
 
-  let data = [];
-  let startDate: Date;
-  let endDate: Date;
-  let storedVal: string | null;
-  let value : any;
-  let diff: number;
-  let diffHour: number;
-  let diffMin: number;
   for (let i = 0; i < 5; i++) {
     storedVal = localStorage.getItem(days[i]);
     if (storedVal !== null) {
       value = JSON.parse(storedVal);
 
-      if (value.startState === '오후') {
-        startDate = new Date(1998, 3, 3, Number(value.startHour) + 12, Number(value.startMin), 0);
+      if (value.startState === "오후") {
+        startDate = new Date(
+          1998,
+          3,
+          3,
+          Number(value.startHour) + 12,
+          Number(value.startMin),
+          0
+        );
       } else {
-        startDate = new Date(1998, 3, 3, Number(value.startHour), Number(value.startMin), 0);
+        startDate = new Date(
+          1998,
+          3,
+          3,
+          Number(value.startHour),
+          Number(value.startMin),
+          0
+        );
       }
-      
-      if (value.endState === '오후') {
-        endDate = new Date(1998, 3, 3, Number(value.endHour) + 12, Number(value.endMin), 0);
+
+      if (value.endState === "오후") {
+        endDate = new Date(
+          1998,
+          3,
+          3,
+          Number(value.endHour) + 12,
+          Number(value.endMin),
+          0
+        );
       } else {
-        endDate = new Date(1998, 3, 3, Number(value.endHour), Number(value.endMin), 0);
+        endDate = new Date(
+          1998,
+          3,
+          3,
+          Number(value.endHour),
+          Number(value.endMin),
+          0
+        );
       }
 
       diff = (endDate.getTime() - startDate.getTime()) / 1000 / 60;
@@ -166,28 +208,21 @@ export function Main() {
       data.push({
         dayTitle: days[i],
         hour: diffHour,
-        min: diffMin
+        min: diffMin,
       });
     } else {
       data.push({
         dayTitle: days[i],
         hour: 0,
-        min: 0
-      })
+        min: 0,
+      });
     }
   }
 
-  /*
-  const calculated = () => {
-    let data2 = [];
-    let totalMin:number = 0;
-    for (let i = 0; i < data.length; i++) {
-      const temp = data2[i];
-      totalMin += temp.hour * 60 + temp.min;
-    }
-    setCalculatedTime(totalMin);
-  }
-  */
+  const resetBtn = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
 
   return (
     <>
@@ -195,16 +230,18 @@ export function Main() {
         <ContentDiv>
           <ContentTitle>퇴근합시당</ContentTitle>
           <RecordDiv>
-            {data.map(day => {
+            {data.map((day: any) => {
               return (
-              <Week
-                key={day.dayTitle}
-                title={day.dayTitle}
-                hour={day.hour}
-                min={day.min}
-                status={setIsModal}
-                dayTitle={setDayTitle} />
-                )})}
+                <Week
+                  key={day.dayTitle}
+                  title={day.dayTitle}
+                  hour={day.hour}
+                  min={day.min}
+                  status={setIsModal}
+                  dayTitle={setDayTitle}
+                />
+              );
+            })}
           </RecordDiv>
           <CalculatedDiv>
             <WeekTime>
@@ -220,26 +257,25 @@ export function Main() {
             <CalculatedTime>
               <WeekTitleSpan>총 근무 시간</WeekTitleSpan>
               <TimeSpan>분</TimeSpan>
-              <ResultTime color="#60aa3e">30</ResultTime>
+              <ResultTime color="#60aa3e">{calculatedTime % 60}</ResultTime>
               <TimeSpan>시간</TimeSpan>
-              <ResultTime color="#60aa3e">38</ResultTime>
+              <ResultTime color="#60aa3e">
+                {Math.floor(calculatedTime / 60)}
+              </ResultTime>
             </CalculatedTime>
             <CalculatedTime>
               <WeekTitleSpan>남은 시간</WeekTitleSpan>
               <TimeSpan>분</TimeSpan>
-              <ResultTime color="#ff6b6b">30</ResultTime>
+              <ResultTime color="#ff6b6b">{remainTime % 60}</ResultTime>
               <TimeSpan>시간</TimeSpan>
-              <ResultTime color="#ff6b6b">1</ResultTime>
+              <ResultTime color="#ff6b6b">
+                {Math.floor(remainTime / 60)}
+              </ResultTime>
             </CalculatedTime>
           </CalculatedDiv>
-          <ResetBtn>시간 초기화</ResetBtn>
+          <ResetBtn onClick={resetBtn}>시간 초기화</ResetBtn>
         </ContentDiv>
-        {isModal && (
-          <RecordModal
-            status={setIsModal}
-            dayTitle={dayTitle}
-          />
-        )}
+        {isModal && <RecordModal status={setIsModal} dayTitle={dayTitle} />}
       </MainDiv>
     </>
   );
