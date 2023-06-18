@@ -125,6 +125,7 @@ export function Main() {
   const [dayTitle, setDayTitle] = useState("");
   const [weekWorkTime, setWeekWorkTime] = useState("");
   const [btnTitle, setBtnTitle] = useState("");
+  const [calculatedTime, setCalculatedTime] = useState(0);
 
   const handleWeekWorkTime = (e: any) => {
     setWeekWorkTime(e.target.value);
@@ -146,8 +147,6 @@ export function Main() {
     if (storedVal !== null) {
       value = JSON.parse(storedVal);
 
-      console.log('확인');
-      console.log(value);
       if (value.startState === '오후') {
         startDate = new Date(1998, 3, 3, Number(value.startHour) + 12, Number(value.startMin), 0);
       } else {
@@ -161,7 +160,7 @@ export function Main() {
       }
 
       diff = (endDate.getTime() - startDate.getTime()) / 1000 / 60;
-      diffHour = Math.floor(diff / 60) + Number(value.stateNum);
+      diffHour = Math.floor(diff / 60) - Number(value.stateNum);
       diffMin = diff % 60;
 
       data.push({
@@ -178,17 +177,17 @@ export function Main() {
     }
   }
 
-  data.map(e => {console.log(`
-    hour : ${e.hour} / min : ${e.min}
-  `)});
-
-  console.log(new Date(1998, 3, 3, 9, 0, 0));
-  console.log(new Date(1998, 3, 3, 18, 30, 0));
-  const ttt = (new Date(1998, 3, 3, 18, 30, 0).getTime() - new Date(1998, 3, 3, 9, 0, 0).getTime()) / 1000 / 60;
-  console.log(ttt);
-  console.log(`diffHour : ${Math.floor(ttt / 60)}`);
-  console.log(`diffMin : ${ttt % 60}`);
-
+  /*
+  const calculated = () => {
+    let data2 = [];
+    let totalMin:number = 0;
+    for (let i = 0; i < data.length; i++) {
+      const temp = data2[i];
+      totalMin += temp.hour * 60 + temp.min;
+    }
+    setCalculatedTime(totalMin);
+  }
+  */
 
   return (
     <>
@@ -197,8 +196,15 @@ export function Main() {
           <ContentTitle>퇴근합시당</ContentTitle>
           <RecordDiv>
             {data.map(day => {
-              return (<Week key={day.dayTitle} title={day.dayTitle} hour={day.hour} min={day.min} />)
-            })}
+              return (
+              <Week
+                key={day.dayTitle}
+                title={day.dayTitle}
+                hour={day.hour}
+                min={day.min}
+                status={setIsModal}
+                dayTitle={setDayTitle} />
+                )})}
           </RecordDiv>
           <CalculatedDiv>
             <WeekTime>
@@ -232,7 +238,6 @@ export function Main() {
           <RecordModal
             status={setIsModal}
             dayTitle={dayTitle}
-            // btnTitle={setBtnTitle}
           />
         )}
       </MainDiv>
