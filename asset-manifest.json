@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/commuting_management_app/static/js/main.223f01da.js",
+    "index.html": "/commuting_management_app/index.html",
+    "main.223f01da.js.map": "/commuting_management_app/static/js/main.223f01da.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.223f01da.js"
+  ]
+}
