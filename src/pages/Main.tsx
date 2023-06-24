@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { RecordModal } from "../components/RecordModal";
 import { Week } from "../components/Week";
-import { start } from "repl";
 
 const MainDiv = styled.div`
   width: 100%;
@@ -12,7 +11,7 @@ const MainDiv = styled.div`
 `;
 
 const ContentDiv = styled.div`
-  width: 33.489%;
+  width: 500px;
   height: 700px;
   box-sizing: border-box;
   background: #ffffff;
@@ -41,6 +40,7 @@ const CalculatedDiv = styled.div`
   height: auto;
   border: 1px solid #d1d1d1;
   border-radius: 5px;
+  box-sizing: border-box;
 `;
 
 const WeekTime = styled.div`
@@ -124,7 +124,6 @@ export function Main() {
   const [isModal, setIsModal] = useState(Boolean);
   const [dayTitle, setDayTitle] = useState("");
   const [weekWorkTime, setWeekWorkTime] = useState(40);
-  const [btnTitle, setBtnTitle] = useState("");
   const [calculatedTime, setCalculatedTime] = useState(0);
   const [remainTime, setRemainTime] = useState(0);
   let data: any = [];
@@ -202,7 +201,7 @@ export function Main() {
       }
 
       diff = (endDate.getTime() - startDate.getTime()) / 1000 / 60;
-      diffHour = Math.floor(diff / 60) - Number(value.stateNum);
+      diffHour = Math.floor(diff / 60) - Number(value.stateNum) - 1;
       diffMin = diff % 60;
 
       data.push({

@@ -6,11 +6,11 @@ interface Props {
   min?: number;
   status?: any;
   dayTitle?: any;
-  btnTitle?: any;
+  bgColor?: string;
 }
 
 const WeekList = styled.div`
-  width: 82%;
+  width: 84%;
   height: 52px;
   background-color: #f8f8f8;
   border: 1px solid #d1d1d1;
@@ -41,33 +41,25 @@ const TimeInput = styled.span`
   font-size: 1.1rem;
 `;
 
-const ControlBtn = styled.button`
+const ControlBtn = styled.button<Props>`
   cursor: pointer;
-  width: 55px;
-  height: 55px;
-  background-color: #6aaf4a;
-  display: inline-block;
+  width: 56px;
+  height: 54px;
+  float: right;
+  background-color: ${(props) => props.bgColor};
+  display: block;
   color: white;
   text-align: center;
   border: none;
   border-radius: 5px;
   font-size: 1.1rem;
-  position: relative;
-  top: -2px;
   &:hover {
     background-color: #5b9440;
     transition: all 0.3s;
   }
 `;
 
-export const Week = ({
-  title,
-  hour,
-  min,
-  status,
-  dayTitle,
-  btnTitle,
-}: Props) => {
+export const Week = ({ title, hour, min, status, dayTitle }: Props) => {
   const openModal = () => {
     status((prev: boolean) => !prev);
     dayTitle(title);
@@ -83,7 +75,15 @@ export const Week = ({
           {hour}시간 {min}분
         </TimeInput>
       </WeekList>
-      <ControlBtn onClick={openModal}>등록</ControlBtn>
+      {hour === 0 && min === 0 ? (
+        <ControlBtn onClick={openModal} bgColor="#6aaf4a">
+          등록
+        </ControlBtn>
+      ) : (
+        <ControlBtn onClick={openModal} bgColor="#8072D7">
+          수정
+        </ControlBtn>
+      )}
     </>
   );
 };

@@ -182,10 +182,9 @@ interface Props {
   bgcolor?: string;
   status?: any;
   dayTitle?: string;
-  btnTitle?: string;
 }
 
-export const RecordModal = ({ status, dayTitle, btnTitle }: Props) => {
+export const RecordModal = ({ status, dayTitle }: Props) => {
   const { addToast } = useToasts();
   const [selectedOption, setSelectedOption] = useState("근무상태");
   const [startState, setStartState] = useState("오전");
@@ -224,7 +223,7 @@ export const RecordModal = ({ status, dayTitle, btnTitle }: Props) => {
     } else if (startState === "오후" && Number(startHour) > 23) {
       addToast("오후는 23시 59분까지 가능", { appearance: "warning" });
     } else if (Number(startHour) < 0) {
-      addToast("시간이 음수가 될 수 없잖아!", { appearance: "warning" });
+      addToast("시간이 음수가 될 수 없어요", { appearance: "warning" });
     }
 
     if (endState === "오전" && Number(endHour) >= 12) {
@@ -232,7 +231,7 @@ export const RecordModal = ({ status, dayTitle, btnTitle }: Props) => {
     } else if (endState === "오후" && Number(endHour) > 23) {
       addToast("오후는 23시 59분까지 가능", { appearance: "warning" });
     } else if (Number(endHour) < 0) {
-      addToast("시간이 음수가 될 수 없잖아!", { appearance: "warning" });
+      addToast("시간이 음수가 될 수 없어요", { appearance: "warning" });
     }
   }, [endHour, startHour]);
 
@@ -276,16 +275,14 @@ export const RecordModal = ({ status, dayTitle, btnTitle }: Props) => {
     } else {
       closeModal();
       const data = {
-        startState : startState,
-        startHour : startHour,
-        startMin : startMin,
-        endState : endState,
-        endHour : endHour,
-        endMin : endMin,
-        stateNum : stateNum,
-        btnTitle : "수정"
+        startState: startState,
+        startHour: startHour,
+        startMin: startMin,
+        endState: endState,
+        endHour: endHour,
+        endMin: endMin,
+        stateNum: stateNum,
       };
-      
 
       if (dayTitle !== undefined) {
         localStorage.setItem(dayTitle, JSON.stringify(data));
